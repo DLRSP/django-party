@@ -151,3 +151,11 @@ type = [
 [tool.bumpversion]
 current_version = "0.1.1"
 allow_dirty = true
+
+[[tool.bumpversion.files]]
+filename = "./src/party/__init__.py"
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = 'version = "{current_version}"'
+replace = 'version = "{new_version}"'

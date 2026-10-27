@@ -11,7 +11,7 @@ updates:
     # managed centrally by the pip-compile lock-regeneration flow
     # (upgrade-dependency.yaml). Per-package Dependabot version PRs only created
     # stale, unmergeable noise that conflicted with the hashed locks. Dependabot
-    # SECURITY updates and alerts are unaffected by this limit (AR-033 SCA).
+    # security updates and alerts are unaffected by this limit.
     open-pull-requests-limit: 0
     labels:
       - "📦 dependencies"
@@ -27,7 +27,6 @@ updates:
     assignees:
       - "dlrsp-dev"
     ignore:
-      # DLRSP reusable workflows are pinned to @main fleet-wide
-      # (registry defaults.workflow_pin_target). Do not open version-pin
-      # bump PRs for them — they only create stale, unmergeable noise.
+      # Reusable workflows are pinned to @main fleet-wide. Do not open
+      # version-pin bump PRs for them — they only create stale noise.
       - dependency-name: "DLRSP/workflows*"
