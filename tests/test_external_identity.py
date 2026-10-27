@@ -47,6 +47,24 @@ def test_same_party_upsert_is_idempotent():
 
 
 @pytest.mark.django_db
+def test_closed_extid_may_rebind_to_another_party():
+    a = Party.objects.create(kind=Party.Kind.PERSON, given_name="A", family_name="A")
+    b = Party.objects.create(kind=Party.Kind.PERSON, given_name="B", family_name="B")
+    prior = upsert_external_identity(
+        a, namespace="pms", scheme="customer", value="99"
+    )
+    prior.valid_to = timezone.now()
+    prior.save(update_fields=["valid_to"])
+    rebound = upsert_external_identity(
+        b, namespace="pms", scheme="customer", value="99"
+    )
+    assert rebound.party_id == b.id
+    assert rebound.valid_to is None
+    assert a.external_identities.filter(valid_to__isnull=True).count() == 0
+    assert b.external_identities.filter(valid_to__isnull=True).count() == 1
+
+
+@pytest.mark.django_db
 def test_same_numeric_value_ok_across_namespaces():
     """Adopters may reuse id spaces; namespace isolates PMS vs fiscal (etc.)."""
     party = Party.objects.create(

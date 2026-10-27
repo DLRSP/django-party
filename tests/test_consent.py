@@ -38,6 +38,19 @@ class ConsentLedgerTests(TestCase):
         with self.assertRaises(ValueError):
             row.delete()
 
+    def test_queryset_delete_raises(self):
+        record_consent(
+            self.party,
+            purpose=ConsentRecord.Purpose.MARKETING,
+            decision=ConsentRecord.Decision.GRANTED,
+            source="operator",
+        )
+        with self.assertRaises(ValueError):
+            ConsentRecord.objects.filter(party=self.party).delete()
+        self.assertEqual(
+            ConsentRecord.objects.filter(party=self.party).count(), 1
+        )
+
     def test_queryset_update_raises(self):
         record_consent(
             self.party,
