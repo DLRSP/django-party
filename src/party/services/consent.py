@@ -9,8 +9,8 @@ from django.utils import timezone as dj_timezone
 
 from party.models import ConsentRecord, Party
 
-# Beddy / PMS flags that must never become ConsentRecord rows.
-BEDDY_CONSENT_FORBIDDEN_KEYS = frozenset(
+# PMS / IdP flags that must never become ConsentRecord rows.
+UNTRUSTED_CONSENT_PAYLOAD_KEYS = frozenset(
     {
         "privacy_check",
         "privacy_check_from_admin",
@@ -51,10 +51,10 @@ def record_consent(
     if decision not in ConsentRecord.Decision.values:
         raise ValueError(f"Invalid consent decision: {decision}")
     src = (source or "").strip()
-    if any(k in src for k in BEDDY_CONSENT_FORBIDDEN_KEYS):
+    if any(k in src for k in UNTRUSTED_CONSENT_PAYLOAD_KEYS):
         raise ValueError(
             "Consent source must not encode PMS privacy/promotion flags; "
-            "use an explicit HITL or portal capture path."
+            "use an explicit operator or portal capture path."
         )
     return ConsentRecord.objects.create(
         party=party,
@@ -65,12 +65,17 @@ def record_consent(
     )
 
 
-def refuse_beddy_consent_mapping(payload: dict) -> None:
-    """Raise if a caller tries to map Beddy privacy/promo bits into consent."""
+def refuse_untrusted_consent_mapping(payload: dict) -> None:
+    """Raise if a caller tries to map PMS privacy/promo bits into consent."""
     if not isinstance(payload, dict):
         return
-    hit = BEDDY_CONSENT_FORBIDDEN_KEYS.intersection(payload.keys())
+    hit = UNTRUSTED_CONSENT_PAYLOAD_KEYS.intersection(payload.keys())
     if hit:
         raise ValueError(
-            f"Refusing Beddy→ConsentRecord mapping for keys: {sorted(hit)}"
+            f"Refusing untrusted→ConsentRecord mapping for keys: {sorted(hit)}"
         )
+
+
+def refuse_beddy_consent_mapping(payload: dict) -> None:
+    """Deprecated alias for refuse_untrusted_consent_mapping (remove after 0.2)."""
+    return refuse_untrusted_consent_mapping(payload)

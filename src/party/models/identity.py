@@ -10,7 +10,7 @@ from party.models.party import Party
 
 
 class ExternalIdentity(models.Model):
-    """One external id in a namespace/scheme (e.g. beddy + customer)."""
+    """One external id in a namespace/scheme (e.g. pms + guest, fiscal + supplier)."""
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     party = models.ForeignKey(

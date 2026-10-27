@@ -21,3 +21,15 @@ class ContactUpsertTests(TestCase):
             ContactPoint.objects.filter(party=party, channel="email", valid_to__isnull=True).count(),
             1,
         )
+
+    def test_empty_value_rejected(self):
+        party = Party.objects.create(
+            kind=Party.Kind.PERSON, given_name="Ada", family_name="Lovelace"
+        )
+        with self.assertRaises(ValueError):
+            upsert_contact_point(
+                party,
+                channel=ContactPoint.Channel.EMAIL,
+                value="  ",
+                valid_from=timezone.now(),
+            )

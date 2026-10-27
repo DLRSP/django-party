@@ -32,6 +32,24 @@ def test_reject_numeric_pms_id_as_code():
 
 
 @pytest.mark.django_db
+def test_reject_short_all_digit_code():
+    party = Party.objects.create(kind=Party.Kind.PERSON, given_name="X", family_name="Y")
+    with pytest.raises(ValidationError):
+        upsert_party_account(
+            party, code="12345", kind=PartyAccount.Kind.PAYABLE, is_default=True
+        )
+
+
+@pytest.mark.django_db
+def test_reject_empty_code():
+    party = Party.objects.create(kind=Party.Kind.PERSON, given_name="X", family_name="Y")
+    with pytest.raises(ValidationError):
+        upsert_party_account(
+            party, code="  ", kind=PartyAccount.Kind.MEMO, is_default=False
+        )
+
+
+@pytest.mark.django_db
 def test_marketing_allowed_requires_granted():
     party = Party.objects.create(kind=Party.Kind.PERSON, given_name="A", family_name="B")
     assert marketing_allowed(party) is False

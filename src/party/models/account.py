@@ -58,13 +58,16 @@ class PartyAccount(models.Model):
         return f"{self.code} ({self.kind})"
 
     def clean(self) -> None:
+        code = (self.code or "").strip()
+        if not code:
+            raise ValidationError({"code": _("Account code is required.")})
         # Never treat opaque external PMS numeric ids as studio account codes.
-        if self.code and self.code.isdigit() and len(self.code) >= 6:
+        if code.isdigit():
             raise ValidationError(
                 {
                     "code": _(
-                        "Numeric identifiers from external PMS must not be used "
-                        "as account codes; assign a studio code instead."
+                        "All-digit codes are reserved for external system ids; "
+                        "assign a studio alphanumeric code instead."
                     )
                 }
             )

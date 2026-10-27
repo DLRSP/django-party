@@ -43,6 +43,26 @@ python manage.py migrate party
 | `ConsentRecord` | Append-only privacy/marketing ledger (`null` ≠ granted) |
 | `PartyAccount` | Thin studio account-code metadata (no balances) |
 
+## ExternalIdentity taxonomy
+
+Pick **site-local** `namespace` / `scheme` strings. Examples:
+
+| namespace | scheme | meaning |
+|----------|--------|---------|
+| `pms` | `guest` / `contact` / `company` | hospitality PMS ids |
+| `fiscal` | `supplier` / `cedente` | fiscal facet primary key |
+| `social` | `google` / `facebook` | IdP subject (auth link mirror) |
+
+Same numeric `value` may exist under different `(namespace, scheme)` pairs. An open `(namespace, scheme, value)` binds to **one** Party.
+
+Wire PMS/fiscal adapters in the **consumer** app — not inside `party.*`.
+
+## Consent and account codes
+
+- Write consent only via `record_consent()`; admin add/change/delete are closed.
+- Never invent marketing consent from PMS privacy/promo payload keys (`refuse_untrusted_consent_mapping`).
+- `PartyAccount.code` must be non-empty and **not** all-digit (PMS ids are not studio codes).
+
 ## License
 
 MIT

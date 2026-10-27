@@ -28,12 +28,12 @@ def upsert_party_account(
     code = (code or "").strip()
     if not code:
         raise ValidationError({"code": "Account code is required."})
-    if code.isdigit() and len(code) >= 6:
+    if code.isdigit():
         raise ValidationError(
             {
                 "code": (
-                    "Numeric identifiers from external PMS must not be used "
-                    "as account codes."
+                    "All-digit codes are reserved for external system ids; "
+                    "assign a studio alphanumeric code instead."
                 )
             }
         )

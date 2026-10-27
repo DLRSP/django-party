@@ -42,6 +42,9 @@ class ConsentRecordAdmin(admin.ModelAdmin):
     list_filter = ("purpose", "decision")
     readonly_fields = ("party", "purpose", "decision", "source", "recorded_at", "created_at")
 
+    def has_add_permission(self, request):
+        return False
+
     def has_change_permission(self, request, obj=None):
         return False
 

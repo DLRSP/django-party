@@ -1,9 +1,15 @@
 """Consent append-only + deny-by-default marketing."""
-from django.test import TestCase
+from django.contrib.admin.sites import AdminSite
+from django.test import RequestFactory, TestCase
 from django.utils import timezone
 
+from party.admin import ConsentRecordAdmin
 from party.models import ConsentRecord, Party
-from party.services import marketing_allowed, record_consent, refuse_beddy_consent_mapping
+from party.services import (
+    marketing_allowed,
+    record_consent,
+    refuse_untrusted_consent_mapping,
+)
 
 
 class ConsentLedgerTests(TestCase):
@@ -17,7 +23,7 @@ class ConsentLedgerTests(TestCase):
             self.party,
             purpose=ConsentRecord.Purpose.MARKETING,
             decision=ConsentRecord.Decision.GRANTED,
-            source="hitl",
+            source="operator",
         )
         with self.assertRaises(ValueError):
             row.delete()
@@ -27,7 +33,7 @@ class ConsentLedgerTests(TestCase):
             self.party,
             purpose=ConsentRecord.Purpose.MARKETING,
             decision=ConsentRecord.Decision.GRANTED,
-            source="hitl",
+            source="operator",
         )
         with self.assertRaises(ValueError):
             ConsentRecord.objects.filter(party=self.party).update(
@@ -42,7 +48,7 @@ class ConsentLedgerTests(TestCase):
             self.party,
             purpose=ConsentRecord.Purpose.MARKETING,
             decision=ConsentRecord.Decision.GRANTED,
-            source="hitl",
+            source="operator",
             recorded_at=now,
         )
         self.assertTrue(marketing_allowed(self.party))
@@ -50,11 +56,18 @@ class ConsentLedgerTests(TestCase):
             self.party,
             purpose=ConsentRecord.Purpose.MARKETING,
             decision=ConsentRecord.Decision.WITHDRAWN,
-            source="hitl",
+            source="operator",
             recorded_at=now + timedelta(seconds=1),
         )
         self.assertFalse(marketing_allowed(self.party))
 
-    def test_refuse_beddy_consent_mapping(self):
+    def test_refuse_untrusted_consent_mapping(self):
         with self.assertRaises(ValueError):
-            refuse_beddy_consent_mapping({"privacy_check": 1})
+            refuse_untrusted_consent_mapping({"privacy_check": 1})
+
+    def test_consent_admin_has_no_add_change_delete(self):
+        admin = ConsentRecordAdmin(ConsentRecord, AdminSite())
+        request = RequestFactory().get("/")
+        self.assertFalse(admin.has_add_permission(request))
+        self.assertFalse(admin.has_change_permission(request))
+        self.assertFalse(admin.has_delete_permission(request))
