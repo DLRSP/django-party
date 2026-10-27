@@ -8,6 +8,16 @@ No significant changes.
 Changelog
 =========
 
+0.2.0 (2026-10-27)
+------------------
+
+* Consent refuse helper is settings-driven
+  (``PARTY_CONSENT_FORBIDDEN_PAYLOAD_KEYS``, default empty); removed
+  Beddy-named public alias.
+* ``PartyAccount.save()`` enforces non-empty, non-all-digit codes.
+* ``ConsentRecord`` queryset blocks ``_update`` / ``_raw_delete`` as well as
+  public ``update`` / ``delete``.
+
 0.1.1 (2026-10-27)
 ------------------
 
@@ -20,3 +30,6 @@ Changelog
 
 * Initial public release: Party, ExternalIdentity, ContactPoint, PostalAddress,
   ConsentRecord (append-only), PartyAccount, PartyMergeEvent.
+
+
+.. note:: 0.1.2 was a local pre-release line absorbed into 0.2.0.

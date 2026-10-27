@@ -60,8 +60,18 @@ Wire PMS/fiscal adapters in the **consumer** app — not inside `party.*`.
 ## Consent and account codes
 
 - Write consent only via `record_consent()`; admin add/change/delete are closed.
-- Never invent marketing consent from PMS privacy/promo payload keys (`refuse_untrusted_consent_mapping`).
-- `PartyAccount.code` must be non-empty and **not** all-digit (PMS ids are not studio codes).
+- Opt in to payload-key refusal via settings, then call `refuse_untrusted_consent_mapping`:
+
+```python
+PARTY_CONSENT_FORBIDDEN_PAYLOAD_KEYS = {
+    "privacy_check",
+    "privacy_check_from_admin",
+    "promotion_check",
+    "promotion_check_from_admin",
+}
+```
+
+- `PartyAccount.code` must be non-empty and **not** all-digit (external ids are not studio codes).
 
 ## License
 

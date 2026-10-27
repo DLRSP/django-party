@@ -136,7 +136,7 @@ package = "party"
 package_dir = "src"
 filename = "CHANGELOG.rst"
 directory = "news/"
-version = "0.1.2"
+version = "0.3.0"
 issue_format = "`#{issue} <https://github.com/DLRSP/django-party/issues/{issue}>`_"
 type = [
     { name = "Process", directory = "process", showcontent = true },
@@ -149,7 +149,7 @@ type = [
 ]
 
 [tool.bumpversion]
-current_version = "0.1.2"
+current_version = "0.3.0"
 allow_dirty = true
 
 [[tool.bumpversion.files]]

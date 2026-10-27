@@ -71,3 +71,7 @@ class PartyAccount(models.Model):
                     )
                 }
             )
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)

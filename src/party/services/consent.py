@@ -2,24 +2,24 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Optional
+from typing import Iterable, Optional
 
+from django.conf import settings
 from django.db import transaction
 from django.utils import timezone as dj_timezone
 
 from party.models import ConsentRecord, Party
 
-# PMS / IdP flags that must never become ConsentRecord rows.
-UNTRUSTED_CONSENT_PAYLOAD_KEYS = frozenset(
-    {
-        "privacy_check",
-        "privacy_check_from_admin",
-        "promotion_check",
-        "promotion_check_from_admin",
-        "privacy_date",
-        "promotion_date",
-    }
-)
+
+def untrusted_consent_payload_keys() -> frozenset[str]:
+    """Consumer-configured PMS/IdP payload keys that must never become consent.
+
+    Default empty — adopters set ``PARTY_CONSENT_FORBIDDEN_PAYLOAD_KEYS`` in settings.
+    """
+    configured = getattr(settings, "PARTY_CONSENT_FORBIDDEN_PAYLOAD_KEYS", None)
+    if not configured:
+        return frozenset()
+    return frozenset(configured)
 
 
 def latest_consent(party: Party, purpose: str) -> Optional[ConsentRecord]:
@@ -51,7 +51,8 @@ def record_consent(
     if decision not in ConsentRecord.Decision.values:
         raise ValueError(f"Invalid consent decision: {decision}")
     src = (source or "").strip()
-    if any(k in src for k in UNTRUSTED_CONSENT_PAYLOAD_KEYS):
+    forbidden = untrusted_consent_payload_keys()
+    if forbidden and any(k in src for k in forbidden):
         raise ValueError(
             "Consent source must not encode PMS privacy/promotion flags; "
             "use an explicit operator or portal capture path."
@@ -65,17 +66,23 @@ def record_consent(
     )
 
 
-def refuse_untrusted_consent_mapping(payload: dict) -> None:
-    """Raise if a caller tries to map PMS privacy/promo bits into consent."""
+def refuse_untrusted_consent_mapping(
+    payload: dict,
+    *,
+    forbidden_keys: Optional[Iterable[str]] = None,
+) -> None:
+    """Raise if payload keys must not be mapped into ConsentRecord."""
     if not isinstance(payload, dict):
         return
-    hit = UNTRUSTED_CONSENT_PAYLOAD_KEYS.intersection(payload.keys())
+    keys = (
+        frozenset(forbidden_keys)
+        if forbidden_keys is not None
+        else untrusted_consent_payload_keys()
+    )
+    if not keys:
+        return
+    hit = keys.intersection(payload.keys())
     if hit:
         raise ValueError(
             f"Refusing untrusted→ConsentRecord mapping for keys: {sorted(hit)}"
         )
-
-
-def refuse_beddy_consent_mapping(payload: dict) -> None:
-    """Deprecated alias for refuse_untrusted_consent_mapping (remove after 0.2)."""
-    return refuse_untrusted_consent_mapping(payload)

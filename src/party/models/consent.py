@@ -22,6 +22,18 @@ class ConsentRecordQuerySet(models.QuerySet):
             "Record a withdrawn decision instead."
         )
 
+    def _update(self, values):
+        raise ValueError(
+            "ConsentRecord is append-only; do not update existing rows. "
+            "Insert a new row via record_consent()."
+        )
+
+    def _raw_delete(self, using):
+        raise ValueError(
+            "ConsentRecord is append-only; do not delete ledger rows. "
+            "Record a withdrawn decision instead."
+        )
+
 
 class ConsentRecordManager(models.Manager.from_queryset(ConsentRecordQuerySet)):
     pass

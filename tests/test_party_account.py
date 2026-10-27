@@ -50,6 +50,19 @@ def test_reject_empty_code():
 
 
 @pytest.mark.django_db
+def test_save_rejects_all_digit_code():
+    party = Party.objects.create(kind=Party.Kind.PERSON, given_name="X", family_name="Y")
+    with pytest.raises(ValidationError):
+        PartyAccount(
+            party=party,
+            code="18856052",
+            kind=PartyAccount.Kind.PAYABLE,
+            is_default=False,
+            valid_from=timezone.now(),
+        ).save()
+
+
+@pytest.mark.django_db
 def test_marketing_allowed_requires_granted():
     party = Party.objects.create(kind=Party.Kind.PERSON, given_name="A", family_name="B")
     assert marketing_allowed(party) is False

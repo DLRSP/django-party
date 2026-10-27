@@ -33,6 +33,20 @@ def test_same_scheme_value_cannot_bind_two_parties():
 
 
 @pytest.mark.django_db
+def test_same_party_upsert_is_idempotent():
+    party = Party.objects.create(kind=Party.Kind.PERSON, given_name="A", family_name="A")
+    first = upsert_external_identity(
+        party, namespace="pms", scheme="customer", value="99", trust=40
+    )
+    second = upsert_external_identity(
+        party, namespace="pms", scheme="customer", value="99", trust=80
+    )
+    assert first.pk == second.pk
+    assert second.trust == 80
+    assert party.external_identities.filter(valid_to__isnull=True).count() == 1
+
+
+@pytest.mark.django_db
 def test_same_numeric_value_ok_across_namespaces():
     """Adopters may reuse id spaces; namespace isolates PMS vs fiscal (etc.)."""
     party = Party.objects.create(
