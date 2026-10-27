@@ -6,3 +6,8 @@ class PartyConfig(AppConfig):
     name = "party"
     label = "party"
     verbose_name = "Party"
+
+    def ready(self) -> None:
+        from party.rbac import connect_rbac_signals
+
+        connect_rbac_signals()

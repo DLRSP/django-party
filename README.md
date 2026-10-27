@@ -41,6 +41,7 @@ python manage.py migrate party
 | `ExternalIdentity` | Multi-source ids (free `namespace`+`scheme`+`value`, e.g. PMS guest id vs fiscal supplier id) |
 | `ContactPoint` / `PostalAddress` | Channels and addresses with validity |
 | `ConsentRecord` | Append-only privacy/marketing ledger (`null` ≠ granted) |
+| `PartyFact` | Keyed attributes with validity (IdP snapshots, historical/obsolete facts) |
 | `PartyAccount` | Thin studio account-code metadata (no balances) |
 
 ## ExternalIdentity taxonomy
@@ -51,7 +52,8 @@ Pick **site-local** `namespace` / `scheme` strings. Examples:
 |----------|--------|---------|
 | `pms` | `guest` / `contact` / `company` | hospitality PMS ids |
 | `fiscal` | `supplier` / `cedente` | fiscal facet primary key |
-| `social` | `google` / `facebook` | IdP subject (auth link mirror) |
+| `socialprofile` | `user` | Auth user pk (django-sp sync) |
+| `socialprofile` | `google` / `facebook` / `twitter` / `live` / `instagram` / `linkedin` / `discord` / `github` | IdP subject uid |
 
 Same numeric `value` may exist under different `(namespace, scheme)` pairs. An open `(namespace, scheme, value)` binds to **one** Party.
 

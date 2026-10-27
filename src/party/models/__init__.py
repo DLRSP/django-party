@@ -4,6 +4,7 @@ from party.models.contact import ContactPoint, PostalAddress
 from party.models.account import PartyAccount
 from party.models.consent import ConsentRecord
 from party.models.merge import PartyMergeEvent
+from party.models.fact import PartyFact, PARTY_FACT_FORBIDDEN_KEYS
 
 __all__ = [
     "Party",
@@ -13,4 +14,6 @@ __all__ = [
     "PartyAccount",
     "ConsentRecord",
     "PartyMergeEvent",
+    "PartyFact",
+    "PARTY_FACT_FORBIDDEN_KEYS",
 ]

@@ -8,6 +8,11 @@ from party.services.consent import (
 )
 from party.services.contacts import upsert_contact_point, upsert_postal_address
 from party.services.identity import upsert_external_identity
+from party.services.facts import (
+    close_party_fact,
+    refuse_forbidden_fact_key,
+    upsert_party_fact,
+)
 
 __all__ = [
     "get_default_party_account",
@@ -20,4 +25,7 @@ __all__ = [
     "upsert_contact_point",
     "upsert_postal_address",
     "upsert_external_identity",
+    "close_party_fact",
+    "refuse_forbidden_fact_key",
+    "upsert_party_fact",
 ]

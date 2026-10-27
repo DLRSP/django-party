@@ -8,6 +8,15 @@ No significant changes.
 Changelog
 =========
 
+0.3.0 (2026-10-27)
+------------------
+
+* Add ``PartyFact`` (keyed attributes with validity) and ``upsert_party_fact`` /
+  ``close_party_fact``; refuse fiscal/token fact keys.
+* Document ExtId namespace ``socialprofile`` for auth IdP links.
+* Seed CRM feature Groups ``dlrsp:crm.contacts_*`` (and consent / account HITL)
+  on ``post_migrate`` (empty assignment — Admin assigns).
+
 0.2.0 (2026-10-27)
 ------------------
 
