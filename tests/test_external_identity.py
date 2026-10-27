@@ -30,3 +30,18 @@ def test_same_scheme_value_cannot_bind_two_parties():
     upsert_external_identity(a, namespace="beddy", scheme="customer", value="99")
     with pytest.raises(ValueError):
         upsert_external_identity(b, namespace="beddy", scheme="customer", value="99")
+
+
+@pytest.mark.django_db
+def test_same_numeric_value_ok_across_namespaces():
+    """Adopters may reuse id spaces; namespace isolates PMS vs fiscal (etc.)."""
+    party = Party.objects.create(
+        kind=Party.Kind.ORGANIZATION, legal_name="Acme"
+    )
+    upsert_external_identity(
+        party, namespace="pms", scheme="guest", value="42"
+    )
+    upsert_external_identity(
+        party, namespace="fiscal", scheme="supplier", value="42"
+    )
+    assert party.external_identities.filter(valid_to__isnull=True).count() == 2

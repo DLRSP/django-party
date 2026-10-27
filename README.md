@@ -38,7 +38,7 @@ python manage.py migrate party
 | Model | Role |
 |-------|------|
 | `Party` | Canonical person or organization |
-| `ExternalIdentity` | Multi-source ids (`beddy`+`customer\|company\|contact`, `fiscal`+ supplier facet, …) |
+| `ExternalIdentity` | Multi-source ids (free `namespace`+`scheme`+`value`, e.g. PMS guest id vs fiscal supplier id) |
 | `ContactPoint` / `PostalAddress` | Channels and addresses with validity |
 | `ConsentRecord` | Append-only privacy/marketing ledger (`null` ≠ granted) |
 | `PartyAccount` | Thin studio account-code metadata (no balances) |
