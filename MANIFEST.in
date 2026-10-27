@@ -1,10 +1,17 @@
-﻿include LICENSE
-include README.md
-include CHANGELOG.rst
-include CODEOWNERS
+﻿include *.py
+include *.toml
+include *.rst
+include *.md
+include *.yaml
+include *.yml
 include tox.ini
-include .pre-commit-config.yaml
+include LICENSE
+include CODEOWNERS
+
 recursive-include requirements *.in *.txt
-recursive-include src/party/migrations *
-recursive-include party_tests *
+recursive-include src *.py *.html *.po *.mo
+recursive-include tests *.py *.html
+recursive-include docs *.md
+recursive-include news *.rst
+
 global-exclude __pycache__ *.py[cod]

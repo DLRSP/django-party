@@ -114,7 +114,41 @@ per-file-ignores = [
 ]
 
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "party_tests.settings"
-pythonpath = ["src", "."]
+addopts = """\
+    --strict-config
+    --strict-markers
+    --ds=tests.settings
+    """
 django_find_project = false
-addopts = "--strict-markers"
+pythonpath = ["src"]
+
+[tool.coverage.paths]
+source = ["src", ".tox/*/site-packages"]
+
+[tool.coverage.run]
+branch = true
+source = ["party"]
+
+[tool.coverage.report]
+show_missing = true
+
+[tool.towncrier]
+package = "party"
+package_dir = "src"
+filename = "CHANGELOG.rst"
+directory = "news/"
+version = "0.1.1"
+issue_format = "`#{issue} <https://github.com/DLRSP/django-party/issues/{issue}>`_"
+type = [
+    { name = "Process", directory = "process", showcontent = true },
+    { name = "Deprecations and Removals", directory = "removal", showcontent = true },
+    { name = "Features", directory = "feature", showcontent = true },
+    { name = "Bug Fixes", directory = "bugfix", showcontent = true },
+    { name = "Vendored Libraries", directory = "vendor", showcontent = true },
+    { name = "Improved Documentation", directory = "doc", showcontent = true },
+    { name = "Trivial Changes", directory = "trivial", showcontent = false },
+]
+
+[tool.bumpversion]
+current_version = "0.1.1"
+allow_dirty = true

@@ -11,7 +11,7 @@ from party.models.party import Party
 
 
 class PartyAccount(models.Model):
-    """Optional studio/partitario code on a party. No balances or postings."""
+    """Optional studio account code on a party. No balances or postings."""
 
     class Kind(models.TextChoices):
         RECEIVABLE = "receivable", _("Receivable")

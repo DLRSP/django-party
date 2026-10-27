@@ -38,10 +38,10 @@ python manage.py migrate party
 | Model | Role |
 |-------|------|
 | `Party` | Canonical person or organization |
-| `ExternalIdentity` | Multi-source ids (`beddy`+`customer\|company\|contact`, `fiscal`+`cedente`, …) |
+| `ExternalIdentity` | Multi-source ids (`beddy`+`customer\|company\|contact`, `fiscal`+ supplier facet, …) |
 | `ContactPoint` / `PostalAddress` | Channels and addresses with validity |
 | `ConsentRecord` | Append-only privacy/marketing ledger (`null` ≠ granted) |
-| `PartyAccount` | Thin studio “Codice conto” metadata (no balances) |
+| `PartyAccount` | Thin studio account-code metadata (no balances) |
 
 ## License
 
