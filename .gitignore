@@ -1,0 +1,42 @@
+﻿#################
+## Editors / IDE (product-agnostic)
+#################
+.idea/
+*.swp
+*~
+.DS_Store
+
+#################
+## Python
+#################
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
+.eggs/
+dist/
+build/
+.installed.cfg
+pip-log.txt
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.venv/
+venv/
+*.mo
+
+#################
+## Docs / site
+#################
+site/
+
+#################
+## Agent architecture (local-only)
+#################
+AGENTS.md
+**/dlrsp-runs/
+**/plans/*.plan.md
+.**/rules/*.mdc
+.**/commands/*.md
+exec_*.bat

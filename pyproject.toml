@@ -1,0 +1,120 @@
+[build-system]
+requires = [
+  "setuptools >= 77",
+  "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "django-party"
+description = "Django party identity hub: contacts, external ids, consent, thin account codes."
+authors = [
+  { name = "DLRSP", email = "dlrsp.dev@gmail.com" },
+]
+requires-python = ">=3.10"
+dynamic = ["version"]
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = [
+  "django",
+  "party",
+  "identity",
+  "crm",
+  "consent",
+  "contacts",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Web Environment",
+  "Framework :: Django",
+  "Framework :: Django :: 4.2",
+  "Framework :: Django :: 5.2",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Internet :: WWW/HTTP",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Software Development :: Libraries :: Application Frameworks",
+]
+dependencies = [
+  "Django>=4.2",
+]
+
+[project.optional-dependencies]
+testing = [
+  "coverage",
+  "pytest",
+  "pytest-django",
+]
+linting = [
+  "flake8",
+  "flake8-pyproject",
+  "flake8-bugbear",
+  "flake8-comprehensions",
+  "flake8-tidy-imports",
+  "flake8-typing-imports",
+  "pylint",
+]
+
+[project.urls]
+Homepage = "https://github.com/DLRSP/django-party"
+Documentation = "https://github.com/DLRSP/django-party/"
+Repository = "https://github.com/DLRSP/django-party"
+Issues = "https://github.com/DLRSP/django-party/issues"
+Changelog = "https://github.com/DLRSP/django-party/blob/main/CHANGELOG.rst"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+include-package-data = true
+zip-safe = false
+
+[tool.setuptools.dynamic]
+version = { attr = "party.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["party*"]
+
+[tool.setuptools.data-files]
+"share/django-party/requirements" = [
+  "requirements/py310-django42.txt",
+  "requirements/py310-django52.txt",
+  "requirements/py311-django42.txt",
+  "requirements/py311-django52.txt",
+  "requirements/py312-django42.txt",
+  "requirements/py312-django52.txt",
+  "requirements/py313-django52.txt",
+  "requirements/py314-django52.txt",
+]
+
+[tool.distutils.bdist_wheel]
+universal = false
+
+[tool.black]
+line-length = 80
+target-version = ['py311']
+
+[tool.isort]
+profile = "black"
+
+[tool.flake8]
+max-line-length = 80
+select = ["E", "F", "W", "B", "B950", "C", "I", "TYP"]
+ignore = ["E203", "E501", "W503", "B950"]
+per-file-ignores = [
+  "**/migrations/*:B950",
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "party_tests.settings"
+pythonpath = ["src", "."]
+django_find_project = false
+addopts = "--strict-markers"
