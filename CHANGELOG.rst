@@ -1,3 +1,9 @@
+party 0.1.2 (2026-10-28)
+========================
+
+No significant changes.
+
+
 =========
 Changelog
 =========
