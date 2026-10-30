@@ -37,8 +37,9 @@ class Party(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = _("party")
-        verbose_name_plural = _("parties")
+        # Admin list chrome uses Contatti; English identifiers unchanged.
+        verbose_name = _("Contatto")
+        verbose_name_plural = _("Contatti")
         indexes = [
             models.Index(fields=["kind", "status"]),
             models.Index(fields=["family_name", "given_name"]),

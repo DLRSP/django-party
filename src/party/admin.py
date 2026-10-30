@@ -35,6 +35,11 @@ class PartyAdmin(admin.ModelAdmin):
     search_fields = ("given_name", "family_name", "legal_name")
     inlines = [ContactPointInline, PartyFactInline, PartyAccountInline]
 
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context.setdefault("title", "Contatti")
+        return super().changelist_view(request, extra_context=extra_context)
+
 
 @admin.register(ExternalIdentity)
 class ExternalIdentityAdmin(admin.ModelAdmin):

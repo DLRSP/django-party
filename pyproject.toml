@@ -119,7 +119,7 @@ addopts = """\
     --ds=tests.settings
     """
 django_find_project = false
-pythonpath = ["src"]
+pythonpath = [".", "src"]
 
 [tool.coverage.paths]
 source = ["src", ".tox/*/site-packages"]
@@ -136,7 +136,7 @@ package = "party"
 package_dir = "src"
 filename = "CHANGELOG.rst"
 directory = "news/"
-version = "0.3.0"
+version = "0.3.1"
 issue_format = "`#{issue} <https://github.com/DLRSP/django-party/issues/{issue}>`_"
 type = [
     { name = "Process", directory = "process", showcontent = true },
@@ -149,7 +149,7 @@ type = [
 ]
 
 [tool.bumpversion]
-current_version = "0.3.0"
+current_version = "0.3.1"
 allow_dirty = true
 
 [[tool.bumpversion.files]]
