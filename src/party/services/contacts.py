@@ -102,3 +102,32 @@ def upsert_postal_address(
         use=use or "",
         valid_from=when,
     )
+
+
+@transaction.atomic
+def close_contact_point(
+    contact: ContactPoint,
+    *,
+    closed_at: Optional[datetime] = None,
+) -> ContactPoint:
+    """Close an open ContactPoint (hub replace / revoke)."""
+    if contact.valid_to is not None:
+        return contact
+    contact.valid_to = closed_at or dj_timezone.now()
+    contact.save(update_fields=["valid_to"])
+    return contact
+
+
+@transaction.atomic
+def close_postal_address(
+    address: PostalAddress,
+    *,
+    closed_at: Optional[datetime] = None,
+) -> PostalAddress:
+    """Close an open PostalAddress (hub replace / revoke)."""
+    if address.valid_to is not None:
+        return address
+    address.valid_to = closed_at or dj_timezone.now()
+    address.save(update_fields=["valid_to"])
+    return address
+

@@ -5,6 +5,7 @@ from party.models.account import PartyAccount
 from party.models.consent import ConsentRecord
 from party.models.merge import PartyMergeEvent
 from party.models.fact import PartyFact, PARTY_FACT_FORBIDDEN_KEYS
+from party.models.outbox import PartyOutbox
 
 __all__ = [
     "Party",
@@ -16,4 +17,5 @@ __all__ = [
     "PartyMergeEvent",
     "PartyFact",
     "PARTY_FACT_FORBIDDEN_KEYS",
+    "PartyOutbox",
 ]
